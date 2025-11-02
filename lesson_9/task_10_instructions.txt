@@ -1,0 +1,46 @@
+"""
+1. Odczyt z pliku.
+1.1 Czy plik istnieje
+1.2 Czy plik jest .json
+1.3 Czy struktura pliku jest ok
+1.4 Czy coś zawiera w sobie
+1.5 Czy mamy prawa do pliku *** to na razie odpuścimy
+
+2. wczytanie zawartości pliku
+2.1 Wczytanie zawartości pliku do listy lub stworzenie pustej listy
+
+3. Dodawanie zadan do pamieci programu
+3.1 Poprosic uzytkownika o input
+3.2 dopisac input do listy
+3.3 Uzyc title na stringu *** tez dodatkowe
+
+4. wyswietlanie pliku
+4.1 wyswietlic liste z pamieci
+
+5. Zapis pliku
+5.1 zapisac zawartość listy do pliku
+
+6. Konsola dla uzytkownika do wyboru
+6.1 Opcje wyboru: zakoncz, wyswietl, dodaj zadanie
+6.2 Przy zakoncz automatyczne zapisanie do pliku listy zadan
+
+Testy ✅
+Otwarcie:
+1. Brak pliku 
+2. Rozszerzenie 
+3. Zaczac z pustym plikiem 
+9. Ponowne otwarcie pliku 
+10. Ponowny zapis
+
+Wyswietlanie
+4. wyswietlic pusty plik
+5. wyslic plik w ktorym cos jest
+8. dodac zadanie czy dalej sie dobrze wyswietla
+
+Dodawanie:
+6. Dodac do pustego czy sie zapisze
+7. Doddac do tego co juz jest
+
+Konsola uytkownika:
+To co zawsze przy konsoli
+"""
