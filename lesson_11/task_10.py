@@ -39,10 +39,10 @@ class E(C):
 class F(D, E):
     """Class demonstrating multiple inheritance and MRO."""
 
-# Expected MRO for class F: F -> D -> B -> A
+# Expected MRO for class F: F -> D -> B -> E -> C -> A
 # Create instance of class F
 f = F()
-f.who_am_i() # >> I am from: Class B
+f.who_am_i() # >> I am from: Class D
 # Checking MRO:
 # 1. .mro()
 print("\nMRO for class F:")

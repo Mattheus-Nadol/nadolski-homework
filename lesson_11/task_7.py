@@ -11,18 +11,15 @@ class TV:
     def activate(self) -> bool:
         """Turns the TV on."""
         self.__active = True
-        return self.__active
 
     def deactivate(self) -> bool:
         """Turns the TV off."""
         self.__active = False
-        return self.__active
 
     def change_channel(self, number:int) -> Union[int, str]:
         """Changes the channel if the TV is on."""
         if self.__active is True:
             self._channel = number
-            return self._channel
         return "Cannot change the channel with TV off"
 
     def turn_up(self, grade:int) -> Union[int, str]:
@@ -30,7 +27,6 @@ class TV:
         if self.__active is True:
             if self._volume + grade <= 100:
                 self._volume += grade
-                return self._volume
             return "Unable to turn up the volume above 100"
         return "Cannot change the volume with TV off"
 
@@ -39,7 +35,6 @@ class TV:
         if self.__active is True:
             if self._volume - grade >= 0:
                 self._volume -= grade
-                return self._volume
             return "Unable to turn down the volume below 0"
         return "Cannot change the volume with TV off"
 
