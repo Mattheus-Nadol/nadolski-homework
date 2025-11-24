@@ -1,4 +1,13 @@
-def parse_url(url: str) -> dict[str, str | int]:
+"""
+Moduł do parsowania adresów URL.
+
+Zawiera funkcję parse_url(), która zwraca słownik z protokołem,
+domeną, portem i ścieżką na podstawie podanego adresu URL.
+"""
+
+from typing import Union
+
+def parse_url(url: str) -> dict[str, Union[str,int]]:
     """
     Funkcja, która przyjmuje jako argument adres URL w formie stringa
     (np. https://api.example.com:8080/users/search?active=true )
@@ -27,7 +36,7 @@ def parse_url(url: str) -> dict[str, str | int]:
 website = "https://api.example.com:8080/users/search?active=true"
 parse_url(website)
 
-# Tests
+# Tests PRINT
 print("TESTS:")
 urls_test = [
     "http://example.com/test",
@@ -40,3 +49,51 @@ urls_test = [
 
 for test_url in urls_test:
     parse_url(test_url)
+
+
+# TESTY z użyciem assert w pętli
+print("Assert TESTS:")
+urls_test_assert = [
+    ("http://example.com/test", {
+        "protocol": "http",
+        "domain": "example.com",
+        "port": 80,
+        "path": "/test"
+    }),
+    ("https://secure.example.org", {
+        "protocol": "https",
+        "domain": "secure.example.org",
+        "port": 443,
+        "path": ""
+    }),
+    ("https://example.com/search?q=python#section", {
+        "protocol": "https",
+        "domain": "example.com",
+        "port": 443,
+        "path": "/search?q=python#section"
+    }),
+    ("http://example.com:1234/path/to/resource", {
+        "protocol": "http",
+        "domain": "example.com",
+        "port": 1234,
+        "path": "/path/to/resource"
+    }),
+    ("http://example.com", {
+        "protocol": "http",
+        "domain": "example.com",
+        "port": 80,
+        "path": ""
+    }),
+    ("https://api.v1.example.co.uk:8080/data", {
+        "protocol": "https",
+        "domain": "api.v1.example.co.uk",
+        "port": 8080,
+        "path": "/data"
+    }),
+]
+
+for url, expected in urls_test_assert:
+    result = parse_url(url)
+    assert result == expected, f"Test failed for {url}. Got {result}, expected {expected}"
+
+print("Wszystkie testy zakończone sukcesem!")
