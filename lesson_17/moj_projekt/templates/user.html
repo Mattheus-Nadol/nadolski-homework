@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil użytkownika</title>
+</head>
+<body>
+    <!-- Używamy instrukcji warunkowej if -->
+    {% if username == 'Admin' %}
+        <h1>Witaj, szefie!</h1>
+    {% else %}
+        <h1>Profil użytkownika: {{ username }}</h1>
+    {% endif %}
+</body>
+</html>

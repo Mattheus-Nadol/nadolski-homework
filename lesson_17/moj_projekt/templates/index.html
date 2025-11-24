@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title> <!-- Zmienna przekazana z Flaska -->
+</head>
+<body>
+    <h1>Witaj na naszej stronie!</h1>
+    <h2>Lista użytkowników:</h2>
+    <ul>
+        <!-- Używamy pętli for, aby iterować po liście users -->
+        {% for user in users %}
+            <li>{{ user }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
