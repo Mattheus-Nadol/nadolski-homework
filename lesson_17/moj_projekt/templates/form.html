@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formularz</title>
+</head>
+<body>
+    <h1>Podaj wiadomość:</h1>
+    <form method="POST">
+        <input type="text" name="message">
+        <button type="submit">Wyślij</button>
+    </form>
+
+    {% if message %}
+        <p>Twoja wiadomość: {{ message }}</p>
+    {% endif %}
+</body>
+</html>
