@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -31,10 +31,8 @@ def about_me():
 # UWAGA: nie tworzymy tabel automatycznie w trakcie importu!
 # Tabele tworzymy ręcznie w terminalu, raz.
 # Aby stworzyć tabele w bazie danych na podstawie modeli,
-# musisz otworzyć terminal Pythona i wykonać:
-# from app import db
-# db.create_all()
-# Zrób to tylko raz! (plik migration_script.py)
+# musisz otworzyć terminal Pythona i wykonać: (plik migration_script.py)
+# Zrób to tylko raz!
 
 @app.route('/add/<int:num1>/<int:num2>')
 def add(num1, num2):
@@ -51,6 +49,16 @@ def my_movies():
     "Monsters Inc."
     ]
     return render_template("movies.html", page_title='Moje ulubione filmy!!!', movies=movies)
+
+@app.route('/form', methods = ["GET", "POST"])
+def form():
+    if request.method == 'GET':
+        return render_template('form.html', message='')
+
+    if request.method == "POST":
+        message = request.form.get('message')
+        return render_template('form.html', message=message)
+
 
 
 if __name__ == '__main__':
