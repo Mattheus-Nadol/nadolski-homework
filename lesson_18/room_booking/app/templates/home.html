@@ -1,0 +1,12 @@
+
+{% extends "base.html" %}
+{% block title %}Strona Główna{% endblock %}
+{% block content %}
+<h1 class="mb-4">Witaj w systemie rezerwacji sal!</h1>
+<p>Wybierz jedną z opcji:</p>
+<div class="list-group">
+    <a class="list-group-item list-group-item-action" href="{{ url_for('dashboard.dashboard') }}">📊 Dashboard</a>
+    <a class="list-group-item list-group-item-action" href="{{ url_for('rooms') }}">🏢 Lista sal</a>
+    <a class="list-group-item list-group-item-action" href="{{ url_for('bookings') }}">📅 Lista rezerwacji</a>
+</div>
+{% endblock %}
