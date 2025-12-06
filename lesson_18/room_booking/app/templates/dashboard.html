@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard - System Rezerwacji</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .stat-card h3 { font-size: 2.5rem; margin: 0; }
+        .stat-card p { margin: 0; opacity: 0.8; }
+        
+        .utilization-bar {
+            height: 25px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .utilization-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #ffc107, #dc3545);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <h1 class="mb-4">📊 Dashboard Rezerwacji</h1>
+        
+        <!-- Statystyki ogólne -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h3>{{ stats.total_rooms }}</h3>
+                    <p>🏢 Aktywnych sal</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-
+gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                    <h3>{{ stats.total_bookings }}</h3>
+                    <p>📅 Wszystkich rezerwacji</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-
+gradient(135deg, #fc4a1a 0%, #f7b733 100%);">
+                    <h3>{{ stats.bookings_today }}</h3>
+                    <p>📆 Rezerwacji dziś</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card" style="background: linear-
+gradient(135deg, #4568dc 0%, #b06ab3 100%);">
+                    <h3>{{ stats.total_users }}</h3>
+                    <p>👥 Użytkowników</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <!-- Najbliższe rezerwacje -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>🕐 Najbliższe rezerwacje (24h)</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Godzina</th>
+                                    <th>Sala</th>
+                                    <th>Tytuł</th>
+                                    <th>Osoba</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in upcoming %}
+                                <tr>
+                                    <td>{{ booking.start_time.strftime('%H:%M') }}</td>
+                                    <td>{{ booking.room.name }}</td>
+                                    <td>{{ booking.title[:30] }}{% if booking.title|length > 30 %}...{% endif %}</td>
+                                    <td>{{ booking.user.name }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-muted text-center">Brak rezerwacji</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Wykorzystanie sal -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>📈 Wykorzystanie sal (ostatnie 30 dni)</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for room in room_utilization %}
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>{{ room.room }}</span>
+                                <span>{{ room.utilization }}% ({{ room.hours 
+}}h)</span>
+                            </div>
+                            <div class="utilization-bar">
+                                <div class="utilization-fill" style="width: {{ room.utilization }}%;"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Top użytkownicy -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>🏆 Top rezerwujący</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tbody>
+                                {% for user in top_users %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-primary me-2">{{ loop.index }}</span>
+                                        {{ user.name }}
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="badge bg-secondary">{{ user.booking_count }} rezerwacji</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script 
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.m
+in.js"></script>
+</body>
+</html>
+
+

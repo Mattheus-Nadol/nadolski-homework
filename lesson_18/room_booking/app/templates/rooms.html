@@ -1,0 +1,26 @@
+
+{% extends "base.html" %}
+{% block title %}Lista Sal{% endblock %}
+{% block content %}
+<h2 class="mb-4">Lista sal konferencyjnych</h2>
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Nazwa</th>
+            <th>Pojemność</th>
+            <th>Piętro</th>
+            <th>Wyposażenie</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for room in rooms %}
+        <tr>
+            <td>{{ room.name }}</td>
+            <td>{{ room.capacity }}</td>
+            <td>{{ room.floor }}</td>
+            <td>{{ room.equipment | map(attribute='name') | join(', ') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
