@@ -1,0 +1,30 @@
+
+{% extends "base.html" %}
+{% block title %}Lista Rezerwacji{% endblock %}
+{% block content %}
+<h2 class="mb-4">Lista rezerwacji</h2>
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Tytuł</th>
+            <th>Sala</th>
+            <th>Użytkownik</th>
+            <th>Od</th>
+            <th>Do</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.title }}</td>
+            <td>{{ booking.room.name }}</td>
+            <td>{{ booking.user.name }}</td>
+            <td>{{ booking.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ booking.end_time.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ booking.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
