@@ -9,8 +9,12 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import os
+from dotenv import load_dotenv
 
 from pathlib import Path
+
+load_dotenv() 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-iph-f3!vhk!7!**i3kx#o-lp!1d=o)%tt^m8+91-81%be5)@7f"
+SECRET_KEY = os.getenv("SECRET_KEY", 'dev-secret-key-change-me')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -76,12 +80,12 @@ WSGI_APPLICATION = "mojastrona.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql', # Informuje Django, że używamy PostgreSQL
-        'NAME': 'excercise_1',              # Nazwa Twojej bazy danych
-        'USER': 'postgres',             # Użytkownik bazy danych
-        'PASSWORD': 'admin123',               # Hasło do bazy danych
-        'HOST': 'localhost',                     # Adres serwera bazy danych zazwyczaj localhost)
-        'PORT': '5432',                          # Domyślny port PostgreSQL
+        'ENGINE': os.getenv('ENGINE', 'django.db.backends.postgresql'), # Informuje Django, że używamy PostgreSQL
+        'NAME': os.getenv('NAME', 'excercise_1'),              # Nazwa Twojej bazy danych
+        'USER': os.getenv('USER','postgres'),             # Użytkownik bazy danych
+        'PASSWORD': os.getenv('PASSWORD', 'admin-password-change-me'),               # Hasło do bazy danych
+        'HOST': os.getenv('HOST','localhost'),                     # Adres serwera bazy danych zazwyczaj localhost)
+        'PORT': os.getenv('PORT','5432'),                          # Domyślny port PostgreSQL
     }
 }
 
