@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Zadanie 7 - formularz{% endblock %}
+
+{% block content %}
+    <h2>Dodawanie produktu</h2>
+    <form method="post">
+        {% csrf_token %} <!-- Ważne zabezpieczenie przed atakami CSRF! -->
+        {{ form }} <!-- Django wygeneruje pola formularza jako paragrafy <p> -->
+        <button type="submit">Wyślij</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Zadanie 6{% endblock %}
+{% block content %}
+    <h2>Zawartość notatki numer: {{all_notes.id}}</h2>
+    <h4>Tytuł: {{all_notes.title}}</h4>
+    <h4>---------------------------------</h4>
+    <h4>Zawartość:</h4>
+    <p>
+        {{all_notes.content}}
+    </p>
+    <h4>---------------------------------</h4>
+{% endblock %}

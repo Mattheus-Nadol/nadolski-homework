@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Zadanie 7{% endblock %}
+{% block content %}
+    <h2>To jest podstrona z produktami</h2>
+    <h3>Lista produktów sortowana po ID:</h3>
+    <ul>
+        {% for product in all_products %}
+            <li>Produkt: {{ product.name }} | Cena: {{ product.price }}</li>
+        {% empty %}
+            <li>Brak produktów do wyświetlenia.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
