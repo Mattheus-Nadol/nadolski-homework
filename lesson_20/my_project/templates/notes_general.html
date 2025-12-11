@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Zadanie 6 i 10{% endblock %}
+{% block content %}
+    <h2>To jest podstrona z notatkami</h2>
+    <h3>Lista notatek sortowana po ID:</h3>
+    <ol>
+        {% for note in page_obj %}
+            <h3>{{ note.title }}</h3>
+            <p>{{ note.content }}</p>
+        {% empty %}
+            <li>Brak notatek do wyświetlenia.</li>
+        {% endfor %}
+    </ol>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; pierwsza</a>
+                <a href="?page={{ page_obj.previous_page_number }}">poprzednia</a>
+            {% endif %}
+            <span class="current">
+                Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">następna</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">ostatnia &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

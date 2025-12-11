@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Zadanie 9{% endblock %}
+{% block content %}
+    <h2>Produkty z kategorii: {{category.name}}</h2>
+    <h4>---------------------------------</h4>
+    <p>
+        {% for product in categorized_products %}
+            <li>{{product.name}}</li>
+        {% empty %}
+            <li>Brak produktów do wyświetlenia.</li>
+        {% endfor %}
+    </p>
+    <h4>---------------------------------</h4>
+{% endblock %}
