@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Zadanie 4 i 5{% endblock %}
+{% block content %}
+    <h2>To jest podstrona z postami</h2>
+    <h3>Lista postów sortowana po ID:</h3>
+    <ul>
+        {% for post in all_posts %}
+            <li>{{ post.id }}. {{ post.title }}</li>
+        {% empty %}
+            <li>Brak produktów do wyświetlenia.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
