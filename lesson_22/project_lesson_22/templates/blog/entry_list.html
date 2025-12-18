@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Wpisów Blogowych</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .controls {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .controls h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-weight: 600;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            background-color: #007cba;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #005a87;
+        }
+        button a {
+            color: white;
+            text-decoration: none;
+        }
+        .entries-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        article {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #007cba;
+        }
+        article h2 {
+            margin-top: 0;
+            color: #007cba;
+        }
+        .meta-info {
+            color: #666;
+            font-size: 0.95em;
+            margin: 15px 0;
+        }
+        .meta-info p {
+            margin: 5px 0;
+        }
+        .authors {
+            margin: 15px 0;
+            color: #666;
+        }
+        .author {
+            display: inline-block;
+            background-color: #e7f3ff;
+            color: #007cba;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-right: 5px;
+        }
+        .content {
+            color: #333;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .stats {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .summary {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #28a745;
+            margin-top: 30px;
+        }
+        .summary h2 {
+            margin-top: 0;
+            color: #28a745;
+        }
+        .pagination {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .pagination .step-links a {
+            color: #007cba;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin: 0 6px;
+            display: inline-block;
+        }
+        .pagination .step-links a:hover {
+            background: #e7f3ff;
+        }
+        .pagination .current {
+            color: #333;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+        .no-entries {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-size: 1.1em;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lista Wpisów Blogowych</h1>
+
+    {% load query_transform %}
+
+    <div class="controls">
+        <h3>🔍 Wyszukiwanie po minimalnej liczbie komentarzy:</h3>
+        <form method="get">
+            {{ form.as_p }}
+            <button type="submit">🔎 Szukaj</button>
+            <button type="button"><a href="{% url 'entry-list' %}">Pokaż wszystkie wpisy</a></button>
+            <button type="button"><a href="?recent=true">📅 Wpisy z ostatniego tygodnia</a></button>
+        </form>
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?{% url_replace request 'page' 1 %}">&laquo; Pierwsza</a>
+                <a href="?{% url_replace request 'page' page_obj.previous_page_number %}">Poprzednia</a>
+            {% endif %}
+            <span class="current">
+                Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?{% url_replace request 'page' page_obj.next_page_number %}">Następna</a>
+                <a href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">Ostatnia &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% if entries %}
+        <div class="entries-container">
+            {% for entry in entries %}
+                <article>
+                    <h2>{{ entry.headline }}</h2>
+                    
+                    <div class="meta-info">
+                        <p><strong>Blog:</strong> {{ entry.blog.name }}</p>
+                        <p><strong>Opublikowano:</strong> {{ entry.pub_date|date:"d.m.Y" }}</p>
+                        <p><strong>Ocena:</strong> 
+                            {% for i in "12345"|slice:":entry.rating" %}⭐{% endfor %}
+                            ({{ entry.rating }}/5)
+                        </p>
+                    </div>
+
+                    <div class="authors">
+                        <strong>👥 Autorzy:</strong>
+                        {% for author in entry.authors.all %}
+                            <span class="author">{{ author.name }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="authors">
+                        <strong>📂 Kategoria:</strong>
+                        {% for category in entry.category.all %}
+                            <span class="author">{{ category.name }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="content">
+                        {{ entry.body_text|truncatewords:30 }}
+                    </div>
+
+                    <div class="stats">
+                        💬 {{ entry.number_of_comments }} komentarzy | 🔗 {{ entry.number_of_pingbacks }} pingbacków
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-entries">Brak wpisów do wyświetlenia.</p>
+    {% endif %}
+
+    <div class="summary">
+        <h2>📊 Statystyki</h2>
+        <p>Łączna liczba wyświetlonych wpisów: <strong>{{ entries|length }}</strong></p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Blog. Wszystkie prawa zastrzeżone.</p>
+    </footer>
+</body>
+</html>
