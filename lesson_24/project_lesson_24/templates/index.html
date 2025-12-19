@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+
+{% block title %}Strona Główna - My Websites Manager{% endblock %}
+
+{% block extra_css %}
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        main {
+            max-width: 1200px;
+            padding: 20px;
+        }
+        
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+            padding: 20px 0;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            color: rgb(0, 0, 0);
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+            font-weight: 500;
+        }
+        
+        .navigation {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .nav-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-card-header {
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .nav-card:nth-child(1) .nav-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .nav-card:nth-child(2) .nav-card-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .nav-card:nth-child(3) .nav-card-header {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .nav-card-content {
+            padding: 30px;
+        }
+        
+        .nav-card-content p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+        
+        .nav-card:nth-child(1) .nav-link {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .nav-card:nth-child(1) .nav-link:hover {
+            background-color: #5568d3;
+        }
+        
+        .nav-card:nth-child(2) .nav-link {
+            background-color: #f5576c;
+            color: white;
+        }
+        
+        .nav-card:nth-child(2) .nav-link:hover {
+            background-color: #e03a52;
+        }
+        
+        .nav-card:nth-child(3) .nav-link {
+            background-color: #fa709a;
+            color: white;
+        }
+        
+        .nav-card:nth-child(3) .nav-link:hover {
+            background-color: #f85a8a;
+        }
+        
+        .nav-link.secondary {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .nav-card:nth-child(1) .nav-link.secondary:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .nav-card:nth-child(2) .nav-link.secondary:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .nav-card:nth-child(3) .nav-link.secondary:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .index-footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .navigation {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .nav-card-header {
+                padding: 30px 20px;
+            }
+            
+            .nav-card-content {
+                padding: 20px;
+            }
+        }
+        
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .navigation {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Hide base footer on index page since we have our own styled footer */
+        footer {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="main-content">
+        <div class="container">
+            <div class="header">
+                <h1>📚 My Websites Manager</h1>
+                <p>Witaj! Wybierz sekcję, którą chcesz odwiedzić</p>
+            </div>
+        
+            <div class="navigation">
+                <!-- Admin Card -->
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <span class="icon">⚙️</span>
+                        ADMIN
+                    </div>
+                    <div class="nav-card-content">
+                        <p>Zarządzaj wszystkimi danymi w systemie - aplikacjami, modelami i ustawieniami.</p>
+                        <div class="nav-links">
+                            <a href="{% url 'admin:index' %}" class="nav-link">Przejdź do Panelu Admina</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Blog Card -->
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <span class="icon">📖</span>
+                        BLOG
+                    </div>
+                    <div class="nav-card-content">
+                        <p>Przeglądaj wszystkie wpisy blogowe, autorów i statystyki.</p>
+                        <div class="nav-links">
+                            <a href="{% url 'entry-list' %}" class="nav-link">Wszystkie Wpisy</a>
+                            <a href="{% url 'authors' %}" class="nav-link secondary">Autorzy</a>
+                            <a href="{% url 'top-authors' %}" class="nav-link secondary">Top Autorzy</a>
+                            <a href="{% url 'stats' %}" class="nav-link secondary">Statystyki Blogów</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cars Card -->
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <span class="icon">🚗</span>
+                        SAMOCHODY
+                    </div>
+                    <div class="nav-card-content">
+                        <p>Przeglądaj dostępne samochody, dealerów i statystyki sprzedaży.</p>
+                        <div class="nav-links">
+                            <a href="{% url 'car-list' %}" class="nav-link">Wszystkie Samochody</a>
+                            <a href="{% url 'dealers' %}" class="nav-link secondary">Dealerzy</a>
+                            <a href="{% url 'car-statistics' %}" class="nav-link secondary">Statystyki</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="index-footer">
+                <p>&copy; 2025 My Websites Manager. Wszystkie prawa zastrzeżone.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
