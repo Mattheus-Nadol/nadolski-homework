@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Wpisy autora - {{ author.name }} - Blog Manager - My Websites Manager{% endblock %}
+
+{% block extra_css %}
+        .tagline {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .entry-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        article {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #007cba;
+        }
+        article h3 {
+            margin-top: 0;
+            color: #007cba;
+        }
+        .entry-meta {
+            color: #666;
+            font-size: 0.95em;
+            margin: 15px 0;
+        }
+        .entry-meta p {
+            margin: 5px 0;
+        }
+        .entry-content {
+            color: #333;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+        .info-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #28a745;
+            margin-top: 30px;
+        }
+        .info-card h3 {
+            margin-top: 0;
+            color: #28a745;
+        }
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .info-card li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+        .no-entries {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-size: 1.1em;
+        }
+{% endblock %}
+
+{% block content %}
+    <h1>✍️ Wpisy autora: {{ author.name }}</h1>
+    {% if author.email %}
+        <p class="tagline">📧 {{ author.email }}</p>
+    {% endif %}
+
+    {% if entries %}
+        <div class="entry-container">
+            {% for entry in entries %}
+                <article>
+                    <h3>{{ entry.headline }}</h3>
+
+                    <div class="entry-meta">
+                        <p>📅 {{ entry.pub_date|date:"j F Y" }}</p>
+                        <p>👥 
+                            {% for author_item in entry.authors.all %}
+                                {{ author_item.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p>⭐ {{ entry.rating }}/5 | 💬 {{ entry.number_of_comments }} komentarzy</p>
+                    </div>
+
+                    <div class="entry-content">
+                        {{ entry.body_text|linebreaks }}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-entries">Ten autor nie ma jeszcze żadnych wpisów.</p>
+    {% endif %}
+
+    <div class="info-card">
+        <h3>ℹ️ Informacje o autorze</h3>
+        <ul>
+            <li><strong>Liczba wpisów:</strong> {{ entries|length }}</li>
+            <li>
+                <strong>Bio:</strong> {% if author.bio %}{{ author.bio }}{% else %}Brak dodatkowych informacji{% endif %}
+            </li>
+        </ul>
+    </div>
+{% endblock %}

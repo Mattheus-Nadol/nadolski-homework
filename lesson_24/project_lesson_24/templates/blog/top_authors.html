@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Najbardziej aktywni autorzy - Blog Manager - My Websites Manager{% endblock %}
+
+{% block extra_css %}
+        .authors-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .author-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #007cba;
+            text-align: center;
+        }
+        .author-card h3 {
+            margin: 0 0 15px 0;
+            color: #007cba;
+            font-size: 1.2em;
+        }
+        .entry-count {
+            font-size: 2em;
+            color: #28a745;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .entry-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .no-authors {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-size: 1.1em;
+        }
+{% endblock %}
+
+{% block content %}
+    <h1>🏆 Najpracowitsi autorzy</h1>
+
+    {% if top_authors %}
+        <div class="authors-container">
+            {% for author in top_authors %}
+                <div class="author-card">
+                    <h3>{{ author.name }}</h3>
+                    <p class="entry-label">Liczba postów:</p>
+                    <p class="entry-count">{{ author.num_entries }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-authors">Brak autorów w systemie.</p>
+    {% endif %}
+{% endblock %}

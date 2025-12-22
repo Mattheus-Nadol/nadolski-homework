@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ car.brand }} {{ car.model }} - Szczegóły - Cars Manager - My Websites Manager{% endblock %}
+
+{% block extra_css %}
+        .car-detail {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .car-header {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .car-photo-section {
+            flex: 0 0 400px;
+        }
+        .car-photo {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .car-info-section {
+            flex: 1;
+        }
+        .car-info-section h1 {
+            color: #007cba;
+            margin-top: 0;
+        }
+        .price {
+            font-size: 2em;
+            color: #28a745;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .car-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .detail-item {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .detail-label {
+            color: #666;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .detail-value {
+            color: #333;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .availability {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+        .available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .unavailable {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .description {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            border-left: 5px solid #007cba;
+        }
+        .description h2 {
+            color: #007cba;
+            margin-top: 0;
+        }
+        .dealer-info {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            border-left: 5px solid #28a745;
+        }
+        .dealer-info h3 {
+            color: #28a745;
+            margin-top: 0;
+        }
+        .dealer-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .dealer-link:hover {
+            background-color: #218838;
+        }
+        @media (max-width: 768px) {
+            .car-header {
+                flex-direction: column;
+            }
+            .car-photo-section {
+                flex: 1;
+            }
+        }
+{% endblock %}
+
+{% block content %}
+    <div class="car-detail">
+        <div class="car-header">
+            {% if car.photo %}
+                <div class="car-photo-section">
+                    <img src="{{ car.photo.url }}" alt="{{ car.brand }} {{ car.model }}" class="car-photo">
+                </div>
+            {% endif %}
+            
+            <div class="car-info-section">
+                <h1>{{ car.brand }} {{ car.model }}</h1>
+                <div class="price">{{ car.price|floatformat:2 }} PLN</div>
+                
+                <span class="availability {% if car.is_available %}available{% else %}unavailable{% endif %}">
+                    {% if car.is_available %}✅ Dostępny{% else %}❌ Niedostępny{% endif %}
+                </span>
+                
+                <div class="car-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Rok produkcji</div>
+                        <div class="detail-value">{{ car.year }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Marka</div>
+                        <div class="detail-value">{{ car.brand }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Model</div>
+                        <div class="detail-value">{{ car.model }}</div>
+                    </div>
+                    {% if car.dealer %}
+                        <div class="detail-item">
+                            <div class="detail-label">Dealer</div>
+                            <div class="detail-value">{{ car.dealer.name }}</div>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {% if car.owner_website %}
+                    <a href="{{ car.owner_website }}" target="_blank" class="dealer-link">🌐 Strona właściciela</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if car.description %}
+        <div class="description">
+            <h2>📝 Opis</h2>
+            <p>{{ car.description|linebreaks }}</p>
+        </div>
+    {% endif %}
+
+    {% if car.dealer %}
+        <div class="dealer-info">
+            <h3>🏢 Informacje o dealerze</h3>
+            <p><strong>Nazwa:</strong> {{ car.dealer.name }}</p>
+            <p><strong>Adres:</strong> {{ car.dealer.address }}</p>
+            <a href="{% url 'dealer-detail' car.dealer.id %}" class="dealer-link">→ Zobacz wszystkie samochody tego dealera</a>
+        </div>
+    {% endif %}
+{% endblock %}
+

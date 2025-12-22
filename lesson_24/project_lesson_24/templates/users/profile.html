@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil - My Websites Manager{% endblock %}
+<!-- (24) Zadanie 3 -->
+{% block content %}
+    <div class="content-section">
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Twój Profil</legend>
+            <div class="form-group">
+                <p><strong>Nazwa użytkownika:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email|default:"Nie podano" }}</p>
+                <p><strong>Data dołączenia:</strong> {{ user.date_joined|date:"d.m.Y H:i" }}</p>
+                <p><strong>Ostatnie logowanie:</strong> {{ user.last_login|date:"d.m.Y H:i"|default:"Nigdy" }}</p>
+            </div>
+        </fieldset>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                <a class="ml-2" href="{% url 'home' %}">Powrót do strony głównej</a>
+            </small>
+            <small class="text-muted">
+                <a class="ml-2" href="{% url 'password_change' %}">Zmiana hasła</a>
+            </small>
+        </div>
+    </div>
+{% endblock %}

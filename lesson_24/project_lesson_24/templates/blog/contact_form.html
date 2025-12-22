@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Kontakt - My Websites Manager{% endblock %}
+
+{% block content %}
+    <div class="content-section">
+        <h1 style="text-align: center; color: #333; margin-bottom: 30px;">📧 Skontaktuj się z nami</h1>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div style="background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Wyślij wiadomość</legend>
+                {{ form.as_p }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Wyślij wiadomość</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+

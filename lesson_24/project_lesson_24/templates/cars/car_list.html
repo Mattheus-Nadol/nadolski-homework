@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista Samochodów - Cars Manager - My Websites Manager{% endblock %}
+
+{% block extra_css %}
+        .controls {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .controls h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group input {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 0.95em;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #007cba;
+            box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.1);
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            align-items: center;
+        }
+        button[type="submit"],
+        .btn-primary {
+            background-color: #007cba;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        button[type="submit"]:hover,
+        .btn-primary:hover {
+            background-color: #005a87;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .btn-filter {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        .btn-filter:hover {
+            background-color: #218838;
+        }
+        button a {
+            color: white;
+            text-decoration: none;
+        }
+        .cars-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .car-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #007cba;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .car-card h3 {
+            margin-top: 0;
+            color: #007cba;
+            font-size: 1.3em;
+        }
+        .car-photo {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .car-info {
+            color: #666;
+            font-size: 0.95em;
+            margin: 10px 0;
+        }
+        .car-info p {
+            margin: 5px 0;
+        }
+        .price {
+            font-size: 1.5em;
+            color: #28a745;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .availability {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .unavailable {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .car-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #007cba;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+        .car-link:hover {
+            background-color: #005a87;
+        }
+        .no-cars {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-size: 1.1em;
+        }
+        .pagination {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .pagination a, .pagination span {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 4px;
+            text-decoration: none;
+            border-radius: 4px;
+            background-color: white;
+            color: #007cba;
+            border: 1px solid #ddd;
+        }
+        .pagination .current {
+            background-color: #007cba;
+            color: white;
+            border-color: #007cba;
+        }
+{% endblock %}
+
+{% block content %}
+    <h1>🚗 Lista Samochodów</h1>
+
+    <div class="controls">
+        <h3>🔍 Filtruj i wyszukaj:</h3>
+        <form method="get">
+            <div class="form-group">
+                <input type="text" name="search" placeholder="Szukaj po marce lub modelu..." value="{{ request.GET.search }}">
+            </div>
+            <div class="button-group">
+                <button type="submit">🔎 Szukaj</button>
+                <a href="{% url 'car-list' %}" class="btn-secondary">Pokaż wszystkie</a>
+                <a href="?available=true" class="btn-filter">✅ Tylko dostępne</a>
+                <a href="?available=false" class="btn-filter">❌ Tylko niedostępne</a>
+            </div>
+        </form>
+    </div>
+
+    {% if cars %}
+        <div class="cars-container">
+            {% for car in cars %}
+                <div class="car-card">
+                    <h3>{{ car.brand }} {{ car.model }}</h3>
+                    
+                    {% if car.photo %}
+                        <img src="{{ car.photo.url }}" alt="{{ car.brand }} {{ car.model }}" class="car-photo">
+                    {% endif %}
+                    
+                    <div class="car-info">
+                        <p><strong>Rok:</strong> {{ car.year }}</p>
+                        <p><strong>Dealer:</strong> {% if car.dealer %}{{ car.dealer.name }}{% else %}Brak{% endif %}</p>
+                    </div>
+                    
+                    <div class="price">{{ car.price|floatformat:2 }} PLN</div>
+                    
+                    <span class="availability {% if car.is_available %}available{% else %}unavailable{% endif %}">
+                        {% if car.is_available %}✅ Dostępny{% else %}❌ Niedostępny{% endif %}
+                    </span>
+                    
+                    <a href="{% url 'car-detail' car.id %}" class="car-link">→ Zobacz szczegóły</a>
+                </div>
+            {% endfor %}
+        </div>
+        
+        {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.available %}&available={{ request.GET.available }}{% endif %}">« Poprzednia</a>
+                {% endif %}
+                
+                <span class="current">
+                    Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.available %}&available={{ request.GET.available }}{% endif %}">Następna »</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% else %}
+        <p class="no-cars">Brak samochodów do wyświetlenia.</p>
+    {% endif %}
+{% endblock %}
+
