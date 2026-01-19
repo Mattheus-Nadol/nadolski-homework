@@ -15,10 +15,10 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class NoteSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Note
         fields = ['title', 'content', 'created_at']
+    
     def validate_title(self, title):
         if len(title) < 5:
             raise ValidationError("Notatka musi mieć conajmniej 5 znaków")
