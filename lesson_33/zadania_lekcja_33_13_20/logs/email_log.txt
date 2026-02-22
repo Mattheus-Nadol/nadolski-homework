@@ -1,0 +1,20 @@
+[2026-02-22T17:50:16.802294] Email sent
+To: mateusz@example.com
+Book: Test Background Task Book
+----------------------------------------
+[2026-02-22T17:51:12.025108] Email sent
+To: mateusz@example.com
+Book: Test Background Task Book to be deleted
+----------------------------------------
+[2026-02-22T18:18:39.386852] Email sent
+To: mateusz@example.com
+Book: Test Lifecycle Book
+----------------------------------------
+[2026-02-22T18:23:22.517369] Email sent
+To: mateusz@example.com
+Book: Test Lifecycle Book do usuniecia
+----------------------------------------
+[2026-02-22T18:25:26.039627] Email sent
+To: mateusz@example.com
+Book: Test Lifecycle Book CACHE
+----------------------------------------
