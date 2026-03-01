@@ -60,6 +60,15 @@ FROM python:3.11-slim
 WORKDIR /app
 
 ############################################################
+# Uprawnienia do katalogu logs – rozwiązanie problemu PermissionError
+#
+# Tworzymy katalog logs i ustawiamy pełne uprawnienia zapisu,
+# aby aplikacja mogła zapisywać logi do Docker volume.
+############################################################
+
+RUN mkdir -p /app/logs && chmod -R 777 /app/logs
+
+############################################################
 # Instalacja zależności w środowisku runtime
 #
 # W multi-stage build same pliki projektu są kopiowane,

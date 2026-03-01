@@ -1,81 +1,78 @@
-# Aplikacja aiohttp – obsługa zmiennej środowiskowej NAME
+# Aplikacja aiohttp – Zadanie 4 (Docker volume logging)
 
 """
-Educyjna aplikacja webowa wykorzystująca aiohttp.
+Prosta aplikacja demonstracyjna aiohttp.
 
-Co robi aplikacja:
-- Odczytuje zmienną środowiskową NAME
-- Jeśli NAME nie istnieje → używa wartości domyślnej
-- Zwraca odpowiedź HTTP "Hello, {NAME}!"
+Funkcjonalność:
+- Odczyt zmiennej środowiskowej NAME
+- Zwracanie odpowiedzi HTTP
+- Zapisywanie logów do pliku w Docker volume
 """
 
 import os
 from aiohttp import web
 
-# (37) Zadanie 4
-# Konfiguracja zapisu logów do pliku z użyciem woluminu Dockera
-
+# ================================
+# Katalog logów (Docker volume persistence)
+# Katalog używany do przechowywania logów aplikacji wewnątrz wolumenu kontenera.
+# Dane zapisane w tym katalogu przetrwają restart kontenera.
+# ================================
 LOG_DIR = "logs"
 LOG_FILE = os.path.join(LOG_DIR, "app.log")
 
-# Tworzymy katalog logs jeśli nie istnieje
+# Tworzymy katalog logs przy starcie aplikacji
 os.makedirs(LOG_DIR, exist_ok=True)
 
-# Pobieramy zmienną środowiskową NAME
-# Jeśli nie istnieje → używamy wartości domyślnej "Docker"
-NAME = os.getenv("NAME", "Docker")
+# Domyślna wartość nazwy użytkownika
+DEFAULT_NAME = os.getenv("NAME", "Docker")
+
+# ================================
+# Handler HTTP
+# ================================
 
 async def handle(request):
     """
-    Endpoint HTTP zwracający powitanie.
+    Endpoint główny aplikacji.
 
-    Dlaczego używamy request?
-    -------------------------
-    aiohttp wymaga handlera przyjmującego request,
-    nawet jeśli nie używamy danych z requesta.
-
-    Logika działania:
-    1. Odczytaj wartość NAME
-    2. Zwróć tekst odpowiedzi
+    Każde wejście na "/" powoduje:
+    - zapis logu do pliku
+    - zwrócenie odpowiedzi HTTP
     """
 
-    # Odczytanie zmiennej środowiskowej podczas zapytania
-    # (dobra praktyka – konfiguracja może się zmieniać)
-    name = os.getenv("NAME", NAME)
+    name = os.getenv("NAME", DEFAULT_NAME)
 
-    # (37) Zadanie 4
-    # Bezpieczny zapis logów – obsługa uprawnień plików w kontenerze
-    # Użyłem blok try/except, ponieważ pokazuje odporność kodu na błędy systemu plików w kontenerze
+    # Upewniamy się, że katalog logów istnieje
+    os.makedirs(LOG_DIR, exist_ok=True)
 
+    log_line = f"Request received. NAME={name}\n"
+
+    # Uwaga edukacyjna:
+    # Blok try/except chroni operację zapisu pliku.
+    # W systemach produkcyjnych zaleca się używanie frameworków logowania.
     try:
-        # Upewniamy się, że katalog logów istnieje
-        os.makedirs(LOG_DIR, exist_ok=True)
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(log_line)
 
-        # Zapis logu w trybie append
-        with open(LOG_FILE, "a") as f:
-            f.write(f"Request received. NAME={name}\n")
+        print("DEBUG:", log_line.strip(), flush=True)
 
-    except PermissionError:
-        # Jeśli użytkownik kontenera nie ma praw do katalogu logs,
-        # próbujemy zapisać log w katalogu tymczasowym
-        fallback_log = "/tmp/app.log"
-
-        with open(fallback_log, "a") as f:
-            f.write(f"Request received. NAME={name}\n")
+    except Exception as e:
+        print("Logging error:", str(e), flush=True)
 
     return web.Response(text=f"Hello, {name}!")
 
-# Tworzymy aplikację webową
+# ================================
+# Konfiguracja routingu HTTP
+# Mapowanie ścieżek URL na funkcje obsługi żądań
+# ================================
 app = web.Application()
 app.router.add_get("/", handle)
 
-# Uruchomienie serwera
+# ================================
+# Start serwera
+# ================================
+
 if __name__ == "__main__":
-    # Uruchamiamy aplikację na wszystkich interfejsach kontenera.
-
-    # host = 0.0.0.0 → pozwala na dostęp z zewnątrz kontenera
-    # port = 8000 → standardowy port aplikacji
-
+    print("Server starting on http://0.0.0.0:8000", flush=True)
     web.run_app(app, host="0.0.0.0", port=8000)
 
 
