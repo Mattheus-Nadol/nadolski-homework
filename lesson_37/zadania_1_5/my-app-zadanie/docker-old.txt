@@ -1,0 +1,73 @@
+############################################################
+# (37) Zadanie 2 – Dockerfile produkcyjny
+# Aplikacja aiohttp z obsługą zmiennej środowiskowej NAME
+############################################################
+
+# Obraz bazowy – lekki runtime Python
+FROM python:3.11-slim
+
+# Metadata obrazu
+LABEL maintainer="learnit-student"
+
+############################################################
+# Zmienne środowiskowe
+#
+# NAME – domyślna nazwa użytkownika
+# Można nadpisać przy uruchomieniu:
+# docker run -e NAME=Alice hello-docker
+############################################################
+
+ENV NAME="Docker"
+
+############################################################
+# Katalog roboczy aplikacji
+############################################################
+
+WORKDIR /app
+
+############################################################
+# Kopiujemy pliki projektu
+#
+# Zakładamy strukturę:
+# project/
+#   Dockerfile
+#   main.py
+#   requirements.txt
+############################################################
+
+############################################################
+# Kopiujemy pliki projektu w kolejności optymalnej dla Docker cache
+#
+# Najpierw requirements.txt → warstwa cache przy instalacji bibliotek
+# Instalacja zależności aplikacji
+#
+# --no-cache-dir → zmniejsza rozmiar obrazu
+#
+# Następnie main.py → zmiany kodu nie wymuszają ponownej instalacji zależności
+############################################################
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY main.py .
+
+############################################################
+# Tworzenie użytkownika bez uprawnień root
+############################################################
+
+RUN useradd -m appuser && chown -R appuser:appuser /app
+USER appuser
+
+############################################################
+# Port aplikacji (informacyjnie)
+############################################################
+
+EXPOSE 8000
+
+############################################################
+# Komenda startowa kontenera
+############################################################
+
+CMD ["python", "main.py"]
+
+############################################################
